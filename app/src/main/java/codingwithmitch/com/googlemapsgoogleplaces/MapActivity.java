@@ -2,6 +2,7 @@ package codingwithmitch.com.googlemapsgoogleplaces;
 
 import android.*;
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -11,6 +12,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.preference.EditTextPreference;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -175,8 +177,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private Marker mMarker;
 
     Button exit,add;
-    Dialog myDialog;
-
+    Dialog myDialog   , myDialog2;
 
 
     @Override
@@ -185,7 +186,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
+        //pop window
         myDialog = new Dialog(this);
+
+        //pop window new comfort room
+        myDialog2 = new Dialog(this);
 
         mSearchText = (AutoCompleteTextView) findViewById(R.id.input_search);
         mGps = (ImageView) findViewById(R.id.ic_gps);
@@ -340,7 +345,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
     //get device current location
-    private void getDeviceLocation(){
+    private void getDeviceLocation()
+    {
         Log.d(TAG, "getDeviceLocation: getting the devices current location");
 
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
@@ -384,7 +390,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         if(placeInfo != null)
         {
-            try{
+            try
+            {
                 String snippet = "Address: " + placeInfo.getAddress() + "\n" +
                         "Comfort Room Rating: " + placeInfo.getRating() + "\n" +
                         "Users comment: " + "\n";
@@ -395,11 +402,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         .snippet(snippet);
                 mMarker = mMap.addMarker(options);
 
-            }catch (NullPointerException e){
+            }
+            catch (NullPointerException e)
+            {
                 Log.e(TAG, "moveCamera: NullPointerException: " + e.getMessage() );
             }
 
-        }else
+        }
+        else
         {
             mMap.addMarker(new MarkerOptions().position(latLng));
         }
@@ -444,12 +454,16 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     COURSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
                 mLocationPermissionsGranted = true;
                 initMap();
-            }else{
+            }
+            else
+            {
                 ActivityCompat.requestPermissions(this,
                         permissions,
                         LOCATION_PERMISSION_REQUEST_CODE);
             }
-        }else{
+        }
+        else
+        {
             ActivityCompat.requestPermissions(this,
                     permissions,
                     LOCATION_PERMISSION_REQUEST_CODE);
@@ -578,37 +592,136 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             Button comment, create, rate;
 
             myDialog.setContentView(R.layout.popwindow);
+            myDialog.setCancelable(true);
+            myDialog.setCanceledOnTouchOutside(true);
 
             txtclose = (TextView) myDialog.findViewById(R.id.txtClose);
             comment = (Button) myDialog.findViewById(R.id.btnComment);
             create = (Button) myDialog.findViewById(R.id.btnCreate);
             rate = (Button) myDialog.findViewById(R.id.btnRate);
 
-            txtclose.setOnClickListener(new View.OnClickListener() {
+
+            //CLOSE BUTTON
+            txtclose.setOnClickListener(new View.OnClickListener()
+            {
                 @Override
-                public void onClick(View view) {
+                public void onClick(View view)
+                {
                     myDialog.dismiss();
 
                 }
             });
-
-            comment.setOnClickListener(new View.OnClickListener() {
+            //COMMENT BUTTON
+            comment.setOnClickListener(new View.OnClickListener()
+            {
                 @Override
-                public void onClick(View view) {
+                public void onClick(View view)
+                {
 
                 }
             });
 
-            create.setOnClickListener(new View.OnClickListener() {
+            //CREATE NEW COMFORT ROOM BUTTON
+            create.setOnClickListener(new View.OnClickListener()
+            {
                 @Override
-                public void onClick(View view) {
+                public void onClick(View view)
+                {
+                    myDialog.dismiss();
 
+                    myDialog2.setContentView(R.layout.popwindow_new_comfort_room);
+                    myDialog2.setCancelable(true);
+                    myDialog2.setCanceledOnTouchOutside(true);
+                    //new
+                    Button btnAdd;
+                    TextView txtclose2;
+                    final EditText place_name;
+
+                    btnAdd = (Button) myDialog2.findViewById(R.id.btnAdd);
+                    txtclose2 = (TextView) myDialog2.findViewById(R.id.txtClose2);
+                    place_name = (EditText) myDialog2.findViewById(R.id.place_name);
+
+                    //new
+                    //DISPLAY ANOTHER PREVIEW
+
+                    txtclose2.setOnClickListener(new View.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(View view)
+                        {
+                            myDialog2.dismiss();
+                        }
+                    });
+
+
+                    btnAdd.setOnClickListener(new View.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(View view)
+                        {
+                            //ADD CURRENT LOCATION (LATITUDE AND LONGITUDE TO FIREBASE)
+                            Log.d(TAG, "getDeviceLocation: getting the devices current location");
+
+                            try
+                            {
+                                if(mLocationPermissionsGranted)
+                                {
+                                    final Task location = mFusedLocationProviderClient.getLastLocation();
+                                    location.addOnCompleteListener(new OnCompleteListener()
+                                    {
+                                        @Override
+                                        public void onComplete(@NonNull Task task)
+                                        {
+                                            if(task.isSuccessful())
+                                            {
+                                                Log.d(TAG, "onComplete: found location!");
+                                                Location currentLocation = (Location) task.getResult();
+
+                                                moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),
+                                                DEFAULT_ZOOM,
+                                                "My Location");
+
+                                                LatLng current = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+                                                mMap.addMarker(new MarkerOptions()
+                                                .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_comfort_room_round))
+                                                .position(current)
+                                                .title(place_name.getText().toString()));
+
+
+
+                                                Toast.makeText(MapActivity.this, "Comfort Room Added!", Toast.LENGTH_SHORT).show();
+                                                myDialog2.dismiss();
+                                            }
+                                            else
+                                            {
+                                                Log.d(TAG, "onComplete: current location is null");
+                                                Toast.makeText(MapActivity.this, "unable to get current location", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+                            catch (SecurityException e)
+                            {
+                            Log.e(TAG, "getDeviceLocation: SecurityException: " + e.getMessage() );
+                            }
+
+                        }
+                    });
+
+                    myDialog2.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    myDialog2.show();
                 }
+
+
             });
 
-            rate.setOnClickListener(new View.OnClickListener() {
+            //RATE BUTTON
+            rate.setOnClickListener(new View.OnClickListener()
+            {
                 @Override
-                public void onClick(View view) {
+                public void onClick(View view)
+                {
 
                 }
             });
@@ -620,12 +733,17 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
             //COMMENTS ON NEARBY COMFORT ROOM
             //ADD CURRENT COMFORT ROOM LOCATION
+                //ADD FIREBASE
             //RATE COMFORT ROOM
 
             **/
 
         }
 }
+
+
+
+
 
 
 

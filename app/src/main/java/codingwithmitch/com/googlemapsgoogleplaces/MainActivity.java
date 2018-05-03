@@ -31,7 +31,7 @@ import com.google.firebase.database.DatabaseReference;
 public class MainActivity extends AppCompatActivity  {
 
     /////
-    //private DatabaseReference mDatabase;
+    private DatabaseReference mDatabase;
     /////
 
 
@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity  {
 
 
         /////
-        //mDatabase= FirebaseDatabase.getInstance().getReference().child("Users");
+        mDatabase= FirebaseDatabase.getInstance().getReference().child("Users");
         /////
 
 
