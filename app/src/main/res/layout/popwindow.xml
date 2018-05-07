@@ -45,35 +45,4 @@
         android:text="NEW COMFORT ROOM"
         android:textColor="@color/white" />
 
-    <Button
-        android:id="@+id/btnComment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/btnCreate"
-        android:layout_alignLeft="@+id/btnCreate"
-        android:layout_alignRight="@+id/btnCreate"
-        android:layout_alignStart="@+id/btnCreate"
-        android:layout_below="@+id/btnCreate"
-        android:layout_gravity="center"
-        android:layout_marginTop="18dp"
-        android:background="@drawable/buttonstyle"
-        android:text="COMMENTS"
-        android:textColor="@color/white" />
-
-    <Button
-        android:id="@+id/btnRate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/btnComment"
-        android:layout_alignLeft="@+id/btnComment"
-        android:layout_alignRight="@+id/btnComment"
-        android:layout_alignStart="@+id/btnComment"
-        android:layout_below="@+id/btnComment"
-        android:layout_gravity="center"
-        android:layout_marginTop="13dp"
-        android:background="@drawable/buttonstyle"
-        android:onClick="Close"
-        android:text="RATE"
-        android:textColor="@color/white" />
-
 </RelativeLayout>

@@ -31,7 +31,7 @@ import com.google.firebase.database.DatabaseReference;
 public class MainActivity extends AppCompatActivity  {
 
     /////
-    private DatabaseReference mDatabase;
+
     /////
 
 
@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity  {
 
 
         /////
-        mDatabase= FirebaseDatabase.getInstance().getReference().child("Users");
+
         /////
 
 
@@ -81,17 +81,23 @@ public class MainActivity extends AppCompatActivity  {
 
         int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(MainActivity.this);
 
-        if(available == ConnectionResult.SUCCESS){
+        if(available == ConnectionResult.SUCCESS)
+        {
             //everything is fine and the user can make map requests
             Log.d(TAG, "isServicesOK: Google Play Services is working");
             return true;
         }
-        else if(GoogleApiAvailability.getInstance().isUserResolvableError(available)){
+
+        else if(GoogleApiAvailability.getInstance().isUserResolvableError(available))
+        {
             //an error occured but we can resolve it
             Log.d(TAG, "isServicesOK: an error occured but we can fix it");
             Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(MainActivity.this, available, ERROR_DIALOG_REQUEST);
             dialog.show();
-        }else{
+        }
+
+        else
+        {
             Toast.makeText(this, "You can't make map requests", Toast.LENGTH_SHORT).show();
         }
         return false;
