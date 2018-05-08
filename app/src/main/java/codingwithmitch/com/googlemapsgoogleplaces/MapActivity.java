@@ -28,6 +28,8 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -733,7 +735,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             add = (Button) findViewById(R.id.btnAdd);
 
             TextView txtclose;
-            Button comment, create, rate;
+            Button create;
 
             myDialog.setContentView(R.layout.popwindow);
             myDialog.setCancelable(true);
@@ -774,7 +776,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     txtclose2 = (TextView) myDialog2.findViewById(R.id.txtClose2);
                     place_name = (EditText) myDialog2.findViewById(R.id.place_name);
 
-                    //new
+                    RadioGroup rgType = (RadioGroup) myDialog2.findViewById(R.id.rgType);
+
+                    final RadioButton rbUrinal = (RadioButton) myDialog2.findViewById(R.id.urinal);
+                    final RadioButton rbRestroom = (RadioButton) myDialog2.findViewById(R.id.restroom);
+                    final RadioButton rbShowerRoom = (RadioButton) myDialog2.findViewById(R.id.showerroom);
 
                     //DISPLAY ANOTHER PREVIEW
                     txtclose2.setOnClickListener(new View.OnClickListener()
@@ -814,11 +820,30 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                                                 DEFAULT_ZOOM,
                                                 "My Location");
 
-                                                LatLng current = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-                                                mMap.addMarker(new MarkerOptions()
-                                                .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_comfort_room_round))
-                                                .position(current)
-                                                .title(place_name.getText().toString()));
+                                                if(rbUrinal.isChecked())
+                                                {
+                                                    LatLng current = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+                                                    mMap.addMarker(new MarkerOptions()
+                                                            .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_comfort_room_round))
+                                                            .position(current)
+                                                            .title(place_name.getText().toString()));
+                                                }
+                                                else if(rbRestroom.isChecked())
+                                                {
+                                                    LatLng current = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+                                                    mMap.addMarker(new MarkerOptions()
+                                                            .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_comfort_room_round))
+                                                            .position(current)
+                                                            .title(place_name.getText().toString()));
+                                                }
+                                                else if(rbShowerRoom.isChecked())
+                                                {
+                                                    LatLng current = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+                                                    mMap.addMarker(new MarkerOptions()
+                                                            .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_comfort_room_round))
+                                                            .position(current)
+                                                            .title(place_name.getText().toString()));
+                                                }
 
                                                 //firebase
                                                 String comfort_room_name = place_name.getText().toString().trim();

@@ -51,14 +51,46 @@
         android:textColor="@color/white"
         android:hint="Bathroom Name" />
 
+    <RadioGroup
+        android:id="@+id/rgType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/place_name"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="10dp">
+
+        <RadioButton
+            android:id="@+id/urinal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Urinal"
+            android:buttonTint="@color/white"
+            android:textColor="@color/white" />
+        <RadioButton
+            android:id="@+id/restroom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Restroom"
+            android:textColor="@color/white"
+            android:buttonTint="@color/white"/>
+        <RadioButton
+            android:id="@+id/showerroom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Shower Room"
+            android:textColor="@color/white"
+            android:buttonTint="@color/white"/>
+
+    </RadioGroup>
+
     <Button
         android:id="@+id/btnAdd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView2"
+        android:layout_below="@+id/rgType"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center"
-        android:layout_marginTop="99dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/buttonstyle"
         android:text="Add"
         android:textColor="@color/white" />
